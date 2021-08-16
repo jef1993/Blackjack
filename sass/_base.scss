@@ -1,0 +1,35 @@
+$--color-background: rgb(33, 48, 42);
+$--color-primary: rgb(255, 197, 38);
+$--color-primary-2: rgb(4, 149, 216);
+
+$--color-white: rgb(240, 236, 228);
+$--color-black: rgb(12, 13, 14);
+
+$--font: "Oswald", sans-serif;
+
+@mixin absCenter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  box-sizing: border-box;
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  color: $--color-white;
+  font-family: "Oswald", sans-serif;
+}
