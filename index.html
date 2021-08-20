@@ -9,7 +9,8 @@
       defer
       src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"
     ></script>
-    <script defer src="app.js"></script>
+    <script defer type="module" src="app.js"></script>
+
     <title>Blackjack</title>
   </head>
   <body>
@@ -24,12 +25,12 @@
           class="settings__input"
           value="1"
           min="1"
-          max="4"
+          max="3"
         />
         <div class="settings__start">Start</div>
       </div>
     </div>
-    <div class="board">
+    <div class="board hidden">
       <div class="dealer">
         <div class="box dealer__box">
           <div class="cards dealer__cards">
@@ -52,7 +53,7 @@
       </div>
 
       <div class="player">
-        <div class="box player__box">
+        <!-- <div class="box player__box">
           <div class="cards player__cards">
             <img src="cards/10_C.svg" alt="" class="card" />
           </div>
@@ -69,45 +70,7 @@
               </svg>
             </div>
           </div>
-        </div>
-
-        <div class="box player__box">
-          <div class="cards player__cards">
-            <img src="cards/10_C.svg" alt="" class="card" />
-          </div>
-          <div class="controls player__controls">
-            <div class="btn hit player__hit">
-              <svg class="icon">
-                <use xlink:href="sprite.svg#icon-plus"></use>
-              </svg>
-            </div>
-            <div class="score player__score">0</div>
-            <div class="btn stay player__stay">
-              <svg class="icon">
-                <use xlink:href="sprite.svg#icon-hour-glass"></use>
-              </svg>
-            </div>
-          </div>
-        </div>
-
-        <div class="box player__box">
-          <div class="cards player__cards">
-            <img src="cards/10_C.svg" alt="" class="card" />
-          </div>
-          <div class="controls player__controls">
-            <div class="btn hit player__hit">
-              <svg class="icon">
-                <use xlink:href="sprite.svg#icon-plus"></use>
-              </svg>
-            </div>
-            <div class="score player__score">0</div>
-            <div class="btn stay player__stay">
-              <svg class="icon">
-                <use xlink:href="sprite.svg#icon-hour-glass"></use>
-              </svg>
-            </div>
-          </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </body>

@@ -32,4 +32,11 @@ body {
   width: 100vw;
   color: $--color-white;
   font-family: "Oswald", sans-serif;
+  background-color: $--color-background;
+}
+
+.hidden {
+  display: none;
+  visibility: hidden;
+  opacity: 0;
 }
