@@ -6,6 +6,12 @@ const settingsStart = document.querySelector(".settings__start");
 
 const board = document.querySelector(".board");
 const playerArea = document.querySelector(".player");
+const dealerArea = document.querySelector(".dealer");
+const playerBox = document.querySelectorAll(".player__box");
+const btn = document.querySelectorAll(".btn");
+const hit = document.querySelectorAll(".hit");
+const stay = document.querySelectorAll(".stay");
+const cardsClass = document.querySelectorAll(".cards");
 
 const cards = [];
 const rank = ["J", "Q", "K", "A"];
@@ -25,12 +31,13 @@ for (let i = 2; i < 15; i++) {
 
 let playerCount = 1;
 let players = [];
+let dealer;
 let deck = [];
-let currentPla;
+let currentPlayer;
 
 class Player {
   constructor(name, point = 0) {
-    (this.name = name), (this.point = point);
+    (this.name = name), (this.point = point), (this.cards = []);
   }
 }
 
@@ -45,11 +52,9 @@ const randomizeCard = function () {
   return newDeck;
 };
 
-const playerBox = `
+const playerBoxHTML = `
 <div class="box player__box">
-<div class="cards player__cards">
-  <img src="cards/10_C.svg" alt="" class="card" />
-</div>
+<div class="cards player__cards"></div>
 <div class="controls player__controls">
   <div class="btn hit player__hit">
     <svg class="icon">
@@ -66,8 +71,18 @@ const playerBox = `
 </div>`;
 
 const addPlayerBox = function () {
-  for (let i = 0; i < players.length; i++) {
-    playerArea.insertAdjacentHTML("afterbegin", playerBox);
+  for (let i = 0; i < players.length - 1; i++) {
+    playerArea.insertAdjacentHTML("beforeend", playerBoxHTML);
+  }
+};
+
+const drawCard = function () {
+  return deck.pop();
+};
+
+const addCards = function (target, num) {
+  for (let i = 0; i < num; i++) {
+    target.push(drawCard());
   }
 };
 
@@ -81,12 +96,44 @@ settingsStart.addEventListener("click", function () {
   players = [...Array(playerCount)].map(
     (el, i) => new Player(`Player${i + 1}`)
   );
-  // players.push(new Player("dealer"));
+  players.unshift(new Player("dealer"));
+  // dealer = new Player();
+
   overlay.classList.toggle("hidden");
   board.classList.toggle("hidden");
   addPlayerBox();
+
+  // randomize deck and add 2 cards to dealer and players each
+  deck = randomizeCard();
+  players.forEach((el) => addCards(el.cards, 2));
+
+  // Update HTML to show players and dealer's cards
+  for (let i = 1; i >= 0; i--) {
+    dealerArea.children[0].children[0].insertAdjacentHTML(
+      "afterbegin",
+      `<img src="cards/${players[0].cards[i]}.svg" alt="" class="card" />`
+    );
+
+    for (let j = 0; j < players.length - 1; j++) {
+      playerArea.children[j].children[0].insertAdjacentHTML(
+        "afterbegin",
+        `<img src="cards/${players[j + 1].cards[i]}.svg" alt="" class="card" />`
+      );
+    }
+  }
+
+  console.log(players);
+  console.log(deck);
+
+  currentPlayer = players[1];
+
+  hit.forEach((el) =>
+    el.addEventListener("click", function () {
+      // currentPlayer.point;
+    })
+  );
 });
 
-deck = randomizeCard();
+// deck = randomizeCard();
 
 console.log(playerArea);
