@@ -6,10 +6,6 @@
   flex-direction: column;
 }
 
-.card {
-  height: 18rem;
-}
-
 .box {
   display: flex;
   flex-direction: column;
@@ -21,8 +17,32 @@
   justify-content: center;
   align-items: center;
 }
-
 .card {
+  height: 18rem;
+  width: 5rem;
+  position: relative;
+
+  & * {
+    height: inherit;
+    position: absolute;
+    margin-left: -3.75rem;
+
+    backface-visibility: hidden;
+  }
+
+  &__front {
+  }
+
+  &__back {
+    transform: rotateY(180deg);
+  }
+}
+
+.face-down {
+  transform: rotateY(180deg);
+}
+.face-up {
+  transform: rotateY(0deg);
 }
 
 .controls {

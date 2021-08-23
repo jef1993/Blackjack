@@ -8,10 +8,9 @@ const board = document.querySelector(".board");
 const playerArea = document.querySelector(".player");
 const dealerArea = document.querySelector(".dealer");
 const playerBox = document.querySelectorAll(".player__box");
-const btn = document.querySelectorAll(".btn");
-const hit = document.querySelectorAll(".hit");
-const stay = document.querySelectorAll(".stay");
-const cardsClass = document.querySelectorAll(".cards");
+// const btn = document.querySelectorAll(".btn");
+// const stay = document.querySelectorAll(".stay");
+// const cardsArea = document.querySelectorAll(".cards");
 
 const cards = [];
 const rank = ["J", "Q", "K", "A"];
@@ -96,7 +95,7 @@ settingsStart.addEventListener("click", function () {
   players = [...Array(playerCount)].map(
     (el, i) => new Player(`Player${i + 1}`)
   );
-  players.unshift(new Player("dealer"));
+  players.push(new Player("dealer"));
   // dealer = new Player();
 
   overlay.classList.toggle("hidden");
@@ -108,16 +107,29 @@ settingsStart.addEventListener("click", function () {
   players.forEach((el) => addCards(el.cards, 2));
 
   // Update HTML to show players and dealer's cards
-  for (let i = 1; i >= 0; i--) {
+
+  const cardHTML = function (front, flipped = false) {
+    return `
+    <div class="card">
+      <img src="cards/${front}.svg" alt="" class="card__front ${
+      flipped ? "face-down" : ""
+    }" />
+      <img src="cards/back.svg" alt="" class="card__back ${
+        flipped ? "face-up" : ""
+      }" />
+    </div>`;
+  };
+
+  for (let i = 0; i < 2; i++) {
     dealerArea.children[0].children[0].insertAdjacentHTML(
-      "afterbegin",
-      `<img src="cards/${players[0].cards[i]}.svg" alt="" class="card" />`
+      "beforeend",
+      cardHTML(players[players.length - 1].cards[i], i === 0 ? true : false)
     );
 
     for (let j = 0; j < players.length - 1; j++) {
       playerArea.children[j].children[0].insertAdjacentHTML(
-        "afterbegin",
-        `<img src="cards/${players[j + 1].cards[i]}.svg" alt="" class="card" />`
+        "beforeend",
+        cardHTML(players[j].cards[i])
       );
     }
   }
@@ -127,13 +139,11 @@ settingsStart.addEventListener("click", function () {
 
   currentPlayer = players[1];
 
+  const hit = document.querySelectorAll(".hit");
+
   hit.forEach((el) =>
     el.addEventListener("click", function () {
-      // currentPlayer.point;
+      console.log("hit");
     })
   );
 });
-
-// deck = randomizeCard();
-
-console.log(playerArea);
