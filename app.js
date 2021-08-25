@@ -8,9 +8,6 @@ const board = document.querySelector(".board");
 const playerArea = document.querySelector(".player");
 const dealerArea = document.querySelector(".dealer");
 const playerBox = document.querySelectorAll(".player__box");
-// const btn = document.querySelectorAll(".btn");
-// const stay = document.querySelectorAll(".stay");
-// const cardsArea = document.querySelectorAll(".cards");
 
 const cards = [];
 const rank = ["J", "Q", "K", "A"];
@@ -35,8 +32,8 @@ let deck = [];
 let currentPlayer;
 
 class Player {
-  constructor(name, point = 0) {
-    (this.name = name), (this.point = point), (this.cards = []);
+  constructor(name) {
+    (this.name = name), (this.point = [0]), (this.cards = []);
   }
 }
 
@@ -55,17 +52,17 @@ const playerBoxHTML = `
 <div class="box player__box">
 <div class="cards player__cards"></div>
 <div class="controls player__controls">
-  <div class="btn hit player__hit">
+  <button class="btn hit player__hit">
     <svg class="icon">
       <use xlink:href="sprite.svg#icon-plus"></use>
     </svg>
-  </div>
+  </button>
   <div class="score player__score">0</div>
-  <div class="btn stay player__stay">
+  <button class="btn stay player__stay">
     <svg class="icon">
       <use xlink:href="sprite.svg#icon-hour-glass"></use>
     </svg>
-  </div>
+  </button>
 </div>
 </div>`;
 
@@ -95,7 +92,7 @@ settingsStart.addEventListener("click", function () {
   players = [...Array(playerCount)].map(
     (el, i) => new Player(`Player${i + 1}`)
   );
-  players.push(new Player("dealer"));
+  players.unshift(new Player("dealer"));
   // dealer = new Player();
 
   overlay.classList.toggle("hidden");
@@ -123,27 +120,89 @@ settingsStart.addEventListener("click", function () {
   for (let i = 0; i < 2; i++) {
     dealerArea.children[0].children[0].insertAdjacentHTML(
       "beforeend",
-      cardHTML(players[players.length - 1].cards[i], i === 0 ? true : false)
+      cardHTML(players[0].cards[i], i === 0 ? true : false)
     );
 
     for (let j = 0; j < players.length - 1; j++) {
       playerArea.children[j].children[0].insertAdjacentHTML(
         "beforeend",
-        cardHTML(players[j].cards[i])
+        cardHTML(players[j + 1].cards[i])
       );
     }
   }
 
-  console.log(players);
-  console.log(deck);
+  // Update point
+  const score = document.querySelectorAll(".score");
 
+  const UpdatePoints = function (targetIndex) {
+    let scores = players[targetIndex].cards
+      .map((item) => {
+        const value = item.split("_")[0].replace(/[JQK]/, 10).replace(/[A]/, 1);
+        return Number(value);
+      })
+      .map((el) => (el === 1 ? [1, 11] : el));
+
+    players[targetIndex].cardValues = scores;
+    const noAces = scores.filter((el) => typeof el === "number");
+    const numOfAce = scores.filter((el) => typeof el !== "number").length;
+
+    const calcAce = function (num) {
+      const output = [];
+      for (let i = 0; i <= num; i++) {
+        output.push(i * 10 + num);
+      }
+      return output;
+    };
+
+    const aceCombo = calcAce(numOfAce);
+    let total = [];
+    for (let i = 0; i < aceCombo.length; i++) {
+      let sum = 0;
+      for (let j = 0; j < noAces.length; j++) {
+        sum += noAces[j];
+      }
+      total.push(sum + aceCombo[i]);
+    }
+    players[targetIndex].point = total;
+
+    const maxPt = total.reduce((a, c) => {
+      return a > c ? a : c;
+    });
+    players[targetIndex].maxPoint = maxPt;
+
+    score[targetIndex].innerHTML =
+      maxPt <= 21 ? players[targetIndex].point.join("/") : "X";
+  };
+
+  for (let i = 0; i < players.length; i++) {
+    UpdatePoints(i);
+  }
+
+  score[0].innerHTML = players[0].cardValues[players[0].cardValues.length - 1];
+
+  // Set current player
   currentPlayer = players[1];
 
-  const hit = document.querySelectorAll(".hit");
+  // Add one card on clicking hit button
 
-  hit.forEach((el) =>
+  const hit = document.querySelectorAll(".hit");
+  const cardsArea = document.querySelectorAll(".cards");
+
+  hit.forEach((el, i) =>
     el.addEventListener("click", function () {
-      console.log("hit");
+      // repunish card if deck is empty
+      if (deck.length <= 0) {
+        deck = randomizeCard().concat(deck);
+      }
+
+      addCards(players[i].cards, 1);
+      cardsArea[i].insertAdjacentHTML(
+        "beforeend",
+        cardHTML(players[i].cards[players[i].cards.length - 1])
+      );
+
+      UpdatePoints(i);
+      
     })
   );
 });

@@ -145,6 +145,9 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  font-family: "Oswald", sans-serif;
+  color: #f0ece4;
+  border: none;
 }
 .btn:hover {
   transform: scale(1.15);
@@ -187,7 +190,7 @@ body {
 }
 
 .score {
-  font-size: 5rem;
+  font-size: 4rem;
   font-weight: 600;
 }
 

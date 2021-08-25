@@ -12,6 +12,7 @@
 }
 
 .cards {
+  // align-self: center;
   flex: 4;
   display: flex;
   justify-content: center;
@@ -64,6 +65,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  font-family: $--font;
+  color: $--color-white;
+  border: none;
 
   &:hover {
     transform: scale(1.15);
@@ -109,7 +113,7 @@
 }
 
 .score {
-  font-size: 5rem;
+  font-size: 4rem;
   font-weight: 600;
 }
 
