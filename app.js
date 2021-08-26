@@ -29,7 +29,7 @@ let playerCount = 1;
 let players = [];
 let dealer;
 let deck = [];
-let currentPlayer;
+let currentPlayerIndex;
 
 class Player {
   constructor(name) {
@@ -134,7 +134,7 @@ settingsStart.addEventListener("click", function () {
   // Update point
   const score = document.querySelectorAll(".score");
 
-  const UpdatePoints = function (targetIndex) {
+  const updatePoints = function (targetIndex) {
     let scores = players[targetIndex].cards
       .map((item) => {
         const value = item.split("_")[0].replace(/[JQK]/, 10).replace(/[A]/, 1);
@@ -175,18 +175,46 @@ settingsStart.addEventListener("click", function () {
   };
 
   for (let i = 0; i < players.length; i++) {
-    UpdatePoints(i);
+    updatePoints(i);
   }
-
+  // veil dealer's score
   score[0].innerHTML = players[0].cardValues[players[0].cardValues.length - 1];
 
+  const btn = document.querySelectorAll(".btn");
+  const hit = document.querySelectorAll(".hit");
+  const stay = document.querySelectorAll(".stay");
+  const cardsArea = document.querySelectorAll(".cards");
+  const cardFront = document.querySelectorAll(".card__front");
+  const cardBack = document.querySelectorAll(".card__back");
+
   // Set current player
-  currentPlayer = players[1];
+  btn.forEach((el) => (el.disabled = "true"));
+  currentPlayerIndex = 1;
+  hit[currentPlayerIndex].disabled = "";
+  stay[currentPlayerIndex].disabled = "";
+
+  const toNextPlayer = function () {
+    hit[currentPlayerIndex].disabled = "true";
+    stay[currentPlayerIndex].disabled = "true";
+
+    currentPlayerIndex =
+      currentPlayerIndex === players.length - 1
+        ? 0
+        : currentPlayerIndex === 0
+        ? ""
+        : currentPlayerIndex + 1;
+
+    if (currentPlayerIndex === 0) {
+      cardFront[0].classList.remove("face-down");
+      cardBack[0].classList.remove("face-up");
+      updatePoints(currentPlayerIndex);
+    }
+
+    hit[currentPlayerIndex].disabled = "";
+    stay[currentPlayerIndex].disabled = "";
+  };
 
   // Add one card on clicking hit button
-
-  const hit = document.querySelectorAll(".hit");
-  const cardsArea = document.querySelectorAll(".cards");
 
   hit.forEach((el, i) =>
     el.addEventListener("click", function () {
@@ -201,8 +229,17 @@ settingsStart.addEventListener("click", function () {
         cardHTML(players[i].cards[players[i].cards.length - 1])
       );
 
-      UpdatePoints(i);
-      
+      updatePoints(i);
+
+      if (players[i].maxPoint >= 21) {
+        toNextPlayer();
+      }
     })
   );
+
+  stay.forEach((el, i) => {
+    el.addEventListener("click", function () {
+      toNextPlayer();
+    });
+  });
 });
