@@ -215,8 +215,6 @@ settingsStart.addEventListener("click", function () {
     box.forEach((el) => el.classList.remove("current"));
     nextRound.classList.toggle("hidden");
 
-    console.log(players);
-
     for (let i = 1; i < players.length; i++) {
       if (players[i].maxPoint <= 21) {
         if (players[i].maxPoint > players[0].maxPoint || players[0] > 21) {
@@ -251,8 +249,6 @@ settingsStart.addEventListener("click", function () {
       cardBack[0].classList.remove("face-up");
       updatePoints(currentPlayerIndex);
     }
-
-    console.log(hit[currentPlayerIndex]);
 
     if (currentPlayerIndex !== "") {
       hit[currentPlayerIndex].disabled = "";
@@ -304,8 +300,6 @@ settingsStart.addEventListener("click", function () {
       addCards(el.cards, 2);
       updatePoints(i);
     });
-
-    console.log(players);
 
     score[0].innerHTML = players[0].cardValues[players[0].cardValues.length - 1]
       .toString()
