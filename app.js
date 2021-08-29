@@ -79,6 +79,9 @@ const drawCard = function () {
 
 const addCards = function (target, num) {
   for (let i = 0; i < num; i++) {
+    if (deck.length <= 0) {
+      deck = randomizeCard().concat(deck);
+    }
     target.push(drawCard());
   }
 };
@@ -193,8 +196,6 @@ settingsStart.addEventListener("click", function () {
   const hit = document.querySelectorAll(".hit");
   const stay = document.querySelectorAll(".stay");
   const cardsArea = document.querySelectorAll(".cards");
-  const cardFront = document.querySelectorAll(".card__front");
-  const cardBack = document.querySelectorAll(".card__back");
   const box = document.querySelectorAll(".box");
 
   // Set current player
@@ -231,8 +232,10 @@ settingsStart.addEventListener("click", function () {
       }
     }
   };
-
   const toNextPlayer = function () {
+    const cardFront = document.querySelectorAll(".card__front");
+    const cardBack = document.querySelectorAll(".card__back");
+
     hit[currentPlayerIndex].disabled = "true";
     stay[currentPlayerIndex].disabled = "true";
     box[currentPlayerIndex].classList.toggle("current");
@@ -245,8 +248,8 @@ settingsStart.addEventListener("click", function () {
         : currentPlayerIndex + 1;
 
     if (currentPlayerIndex === 0) {
-      cardFront[0].classList.remove("face-down");
-      cardBack[0].classList.remove("face-up");
+      cardFront[0].classList.toggle("face-down");
+      cardBack[0].classList.toggle("face-up");
       updatePoints(currentPlayerIndex);
     }
 
@@ -263,10 +266,9 @@ settingsStart.addEventListener("click", function () {
 
   hit.forEach((el, i) =>
     el.addEventListener("click", function () {
-      // repunish card if deck is empty
-      if (deck.length <= 0) {
-        deck = randomizeCard().concat(deck);
-      }
+      // if (deck.length <= 0) {
+      //   deck = randomizeCard().concat(deck);
+      // }
 
       addCards(players[i].cards, 1);
       cardsArea[i].insertAdjacentHTML(
@@ -289,6 +291,9 @@ settingsStart.addEventListener("click", function () {
   });
 
   nextRound.addEventListener("click", function () {
+    const cardFront = document.querySelectorAll(".card__front");
+    const cardBack = document.querySelectorAll(".card__back");
+
     box.forEach((el) => {
       el.classList.remove("win");
       el.classList.remove("lose");
@@ -312,5 +317,7 @@ settingsStart.addEventListener("click", function () {
     cardsArea.forEach((el) => (el.innerHTML = ""));
     displayInitialCards();
     nextRound.classList.toggle("hidden");
+
+    console.log(currentPlayerIndex);
   });
 });
