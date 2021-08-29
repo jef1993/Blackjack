@@ -123,17 +123,16 @@ settingsStart.addEventListener("click", function () {
 
   const displayInitialCards = function () {
     for (let i = 0; i < 2; i++) {
-      dealerArea.children[0].children[0].insertAdjacentHTML(
-        "beforeend",
-        cardHTML(players[0].cards[i], i === 0 ? true : false)
-      );
-
       for (let j = 0; j < players.length - 1; j++) {
         playerArea.children[j].children[0].insertAdjacentHTML(
           "beforeend",
           cardHTML(players[j + 1].cards[i])
         );
       }
+      dealerArea.children[0].children[0].insertAdjacentHTML(
+        "beforeend",
+        cardHTML(players[0].cards[i], i === 0 ? true : false)
+      );
     }
   };
 
