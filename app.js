@@ -128,11 +128,11 @@ settingsStart.addEventListener("click", function () {
           "beforeend",
           cardHTML(players[j + 1].cards[i])
         );
-        dealerArea.children[0].children[0].insertAdjacentHTML(
-          "beforeend",
-          cardHTML(players[0].cards[i], i === 0 ? true : false)
-        );
       }
+      dealerArea.children[0].children[0].insertAdjacentHTML(
+        "beforeend",
+        cardHTML(players[0].cards[i], i === 0 ? true : false)
+      );
     }
   };
 
