@@ -128,11 +128,11 @@ settingsStart.addEventListener("click", function () {
           "beforeend",
           cardHTML(players[j + 1].cards[i])
         );
+        dealerArea.children[0].children[0].insertAdjacentHTML(
+          "beforeend",
+          cardHTML(players[0].cards[i], i === 0 ? true : false)
+        );
       }
-      dealerArea.children[0].children[0].insertAdjacentHTML(
-        "beforeend",
-        cardHTML(players[0].cards[i], i === 0 ? true : false)
-      );
     }
   };
 
@@ -215,16 +215,19 @@ settingsStart.addEventListener("click", function () {
     box.forEach((el) => el.classList.remove("current"));
     nextRound.classList.toggle("hidden");
 
+    console.log(players);
+
     for (let i = 1; i < players.length; i++) {
       if (players[i].maxPoint <= 21) {
-        if (players[i].maxPoint > players[0].maxPoint || players[0] > 21) {
+        if (
+          players[i].maxPoint > players[0].maxPoint ||
+          players[0].maxPoint > 21
+        ) {
           box[i].classList.toggle("win");
+        } else if (players[i].maxPoint < players[0].maxPoint) {
+          box[i].classList.toggle("lose");
         } else {
-          if (players[i].maxPoint < players[0].maxPoint) {
-            box[i].classList.toggle("lose");
-          } else {
-            box[i].classList.toggle("tie");
-          }
+          box[i].classList.toggle("tie");
         }
       } else {
         box[i].classList.toggle("lose");
@@ -321,7 +324,5 @@ settingsStart.addEventListener("click", function () {
     cardsArea.forEach((el) => (el.innerHTML = ""));
     displayInitialCards();
     nextRound.classList.toggle("hidden");
-
-    console.log(currentPlayerIndex);
   });
 });
