@@ -240,6 +240,11 @@ settingsStart.addEventListener("click", function () {
     stay[currentPlayerIndex].disabled = "true";
     box[currentPlayerIndex].classList.toggle("current");
 
+    score[currentPlayerIndex].innerHTML =
+      players[currentPlayerIndex].maxPoint <= 21
+        ? players[currentPlayerIndex].maxPoint
+        : "X";
+
     currentPlayerIndex =
       currentPlayerIndex === players.length - 1
         ? 0
