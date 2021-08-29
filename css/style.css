@@ -91,9 +91,31 @@ body {
   flex-direction: column;
 }
 
+.next-round {
+  font-size: 4rem;
+  color: #0c0d0e;
+  background-color: #f0ece4;
+  position: fixed;
+  padding: 1rem 3rem;
+  border-radius: 100px;
+  border: 3px solid #0c0d0e;
+  text-transform: uppercase;
+  top: 3rem;
+  right: 3rem;
+  transition: all 0.1s;
+  z-index: 10;
+}
+.next-round:hover {
+  background-color: #ffc526;
+  border-color: #f0ece4;
+  color: #f0ece4;
+  cursor: pointer;
+}
+
 .box {
   display: flex;
   flex-direction: column;
+  border: 2px solid rgba(240, 236, 228, 0.3);
 }
 
 .cards {
@@ -148,6 +170,8 @@ body {
   font-family: "Oswald", sans-serif;
   color: #f0ece4;
   border: none;
+  opacity: 0;
+  visibility: hidden;
 }
 .btn:hover {
   transform: scale(1.15);
@@ -206,7 +230,6 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  border: 2px solid #f0ece4;
   height: 35rem;
   width: 50rem;
   border-radius: 1rem;
@@ -224,9 +247,38 @@ body {
   height: 40rem;
   max-width: 50rem;
   min-width: 30rem;
-  border: 2px solid #f0ece4;
   border-radius: 1rem;
   margin: 3rem 2rem;
+}
+
+.current {
+  border-color: #15efff;
+  box-shadow: 0 0 5px 2px #15efff;
+}
+.current .controls .btn {
+  opacity: 1;
+  visibility: visible;
+}
+
+.win {
+  border-color: #ffc526;
+}
+.win .controls .score {
+  color: #ffc526;
+}
+
+.lose {
+  border-color: #0c0d0e;
+}
+.lose .controls .score {
+  color: #0c0d0e;
+}
+
+.tie {
+  border-color: #f0ece4;
+}
+.tie .controls .score {
+  color: #f0ece4;
 }
 
 /*# sourceMappingURL=style.css.map */

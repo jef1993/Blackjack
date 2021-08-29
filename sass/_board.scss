@@ -6,9 +6,32 @@
   flex-direction: column;
 }
 
+.next-round {
+  font-size: 4rem;
+  color: $--color-black;
+  background-color: $--color-white;
+  position: fixed;
+  padding: 1rem 3rem;
+  border-radius: 100px;
+  border: 3px solid $--color-black;
+  text-transform: uppercase;
+  top: 3rem;
+  right: 3rem;
+  transition: all 0.1s;
+  z-index: 10;
+
+  &:hover {
+    background-color: $--color-primary;
+    border-color: $--color-white;
+    color: $--color-white;
+    cursor: pointer;
+  }
+}
+
 .box {
   display: flex;
   flex-direction: column;
+  border: 2px solid rgba($--color-white, 0.3);
 }
 
 .cards {
@@ -68,6 +91,8 @@
   font-family: $--font;
   color: $--color-white;
   border: none;
+  opacity: 0;
+  visibility: hidden;
 
   &:hover {
     transform: scale(1.15);
@@ -126,7 +151,7 @@
 
   &__box {
     @include absCenter;
-    border: 2px solid $--color-white;
+
     height: 35rem;
     width: 50rem;
     border-radius: 1rem;
@@ -145,8 +170,42 @@
     height: 40rem;
     max-width: 50rem;
     min-width: 30rem;
-    border: 2px solid $--color-white;
+
     border-radius: 1rem;
     margin: 3rem 2rem;
+  }
+}
+
+.current {
+  border-color: $--color-primary-3;
+  box-shadow: 0 0 5px 2px $--color-primary-3;
+
+  & .controls .btn {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.win {
+  border-color: $--color-primary;
+
+  & .controls .score {
+    color: $--color-primary;
+  }
+}
+
+.lose {
+  border-color: $--color-black;
+
+  & .controls .score {
+    color: $--color-black;
+  }
+}
+
+.tie {
+  border-color: $--color-white;
+
+  & .controls .score {
+    color: $--color-white;
   }
 }

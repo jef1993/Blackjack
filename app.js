@@ -8,6 +8,7 @@ const board = document.querySelector(".board");
 const playerArea = document.querySelector(".player");
 const dealerArea = document.querySelector(".dealer");
 const playerBox = document.querySelectorAll(".player__box");
+const nextRound = document.querySelector(".next-round");
 
 const cards = [];
 const rank = ["J", "Q", "K", "A"];
@@ -117,19 +118,23 @@ settingsStart.addEventListener("click", function () {
     </div>`;
   };
 
-  for (let i = 0; i < 2; i++) {
-    dealerArea.children[0].children[0].insertAdjacentHTML(
-      "beforeend",
-      cardHTML(players[0].cards[i], i === 0 ? true : false)
-    );
-
-    for (let j = 0; j < players.length - 1; j++) {
-      playerArea.children[j].children[0].insertAdjacentHTML(
+  const displayInitialCards = function () {
+    for (let i = 0; i < 2; i++) {
+      dealerArea.children[0].children[0].insertAdjacentHTML(
         "beforeend",
-        cardHTML(players[j + 1].cards[i])
+        cardHTML(players[0].cards[i], i === 0 ? true : false)
       );
+
+      for (let j = 0; j < players.length - 1; j++) {
+        playerArea.children[j].children[0].insertAdjacentHTML(
+          "beforeend",
+          cardHTML(players[j + 1].cards[i])
+        );
+      }
     }
-  }
+  };
+
+  displayInitialCards();
 
   // Update point
   const score = document.querySelectorAll(".score");
@@ -166,19 +171,23 @@ settingsStart.addEventListener("click", function () {
     players[targetIndex].point = total;
 
     const maxPt = total.reduce((a, c) => {
-      return a > c ? a : c;
+      return c > a && c <= 21 ? c : a;
     });
     players[targetIndex].maxPoint = maxPt;
 
     score[targetIndex].innerHTML =
-      maxPt <= 21 ? players[targetIndex].point.join("/") : "X";
+      maxPt <= 21
+        ? players[targetIndex].point.filter((el) => el <= 21).join("/")
+        : "X";
   };
 
   for (let i = 0; i < players.length; i++) {
     updatePoints(i);
   }
   // veil dealer's score
-  score[0].innerHTML = players[0].cardValues[players[0].cardValues.length - 1];
+  score[0].innerHTML = players[0].cardValues[players[0].cardValues.length - 1]
+    .toString()
+    .replace(/,/, "/");
 
   const btn = document.querySelectorAll(".btn");
   const hit = document.querySelectorAll(".hit");
@@ -186,16 +195,49 @@ settingsStart.addEventListener("click", function () {
   const cardsArea = document.querySelectorAll(".cards");
   const cardFront = document.querySelectorAll(".card__front");
   const cardBack = document.querySelectorAll(".card__back");
+  const box = document.querySelectorAll(".box");
 
   // Set current player
-  btn.forEach((el) => (el.disabled = "true"));
-  currentPlayerIndex = 1;
-  hit[currentPlayerIndex].disabled = "";
-  stay[currentPlayerIndex].disabled = "";
+
+  const setFirstPlayer = function () {
+    btn.forEach((el) => (el.disabled = "true"));
+    currentPlayerIndex = 1;
+    hit[currentPlayerIndex].disabled = "";
+    stay[currentPlayerIndex].disabled = "";
+    box[currentPlayerIndex].classList.toggle("current");
+  };
+
+  setFirstPlayer();
+
+  const calcPoint = function () {
+    hit.forEach((el) => (el.disabled = "true"));
+    stay.forEach((el) => (el.disabled = "true"));
+    box.forEach((el) => el.classList.remove("current"));
+    nextRound.classList.toggle("hidden");
+
+    console.log(players);
+
+    for (let i = 1; i < players.length; i++) {
+      if (players[i].maxPoint <= 21) {
+        if (players[i].maxPoint > players[0].maxPoint || players[0] > 21) {
+          box[i].classList.toggle("win");
+        } else {
+          if (players[i].maxPoint < players[0].maxPoint) {
+            box[i].classList.toggle("lose");
+          } else {
+            box[i].classList.toggle("tie");
+          }
+        }
+      } else {
+        box[i].classList.toggle("lose");
+      }
+    }
+  };
 
   const toNextPlayer = function () {
     hit[currentPlayerIndex].disabled = "true";
     stay[currentPlayerIndex].disabled = "true";
+    box[currentPlayerIndex].classList.toggle("current");
 
     currentPlayerIndex =
       currentPlayerIndex === players.length - 1
@@ -210,8 +252,15 @@ settingsStart.addEventListener("click", function () {
       updatePoints(currentPlayerIndex);
     }
 
-    hit[currentPlayerIndex].disabled = "";
-    stay[currentPlayerIndex].disabled = "";
+    console.log(hit[currentPlayerIndex]);
+
+    if (currentPlayerIndex !== "") {
+      hit[currentPlayerIndex].disabled = "";
+      stay[currentPlayerIndex].disabled = "";
+      box[currentPlayerIndex].classList.toggle("current");
+    } else {
+      calcPoint();
+    }
   };
 
   // Add one card on clicking hit button
@@ -241,5 +290,33 @@ settingsStart.addEventListener("click", function () {
     el.addEventListener("click", function () {
       toNextPlayer();
     });
+  });
+
+  nextRound.addEventListener("click", function () {
+    box.forEach((el) => {
+      el.classList.remove("win");
+      el.classList.remove("lose");
+      el.classList.remove("tie");
+    });
+
+    players.forEach((el, i) => {
+      el.cards = [];
+      addCards(el.cards, 2);
+      updatePoints(i);
+    });
+
+    console.log(players);
+
+    score[0].innerHTML = players[0].cardValues[players[0].cardValues.length - 1]
+      .toString()
+      .replace(/,/, "/");
+
+    cardFront[0].classList.toggle("face-down");
+    cardBack[0].classList.toggle("face-up");
+
+    setFirstPlayer();
+    cardsArea.forEach((el) => (el.innerHTML = ""));
+    displayInitialCards();
+    nextRound.classList.toggle("hidden");
   });
 });
